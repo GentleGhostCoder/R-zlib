@@ -1,6 +1,10 @@
 # zlib for R
 [![Tests](https://github.com/sgeist-ionos/R-zlib/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/sgeist-ionos/R-zlib/actions/workflows/test.yml)
 
+[![Build and Deploy R Markdown Docs](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build-docs.yml/badge.svg?branch=main)](https://sgeist-ionos.github.io/R-zlib/)
+
+[![Build tarball artifact on release](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/sgeist-ionos/R-zlib/releases)
+
 ## Description
 
 The `zlib` package for R aims to offer an R-based equivalent of Python's built-in `zlib` module for data compression and decompression. This package provides a suite of functions for working with zlib compression, including utilities for compressing and decompressing data streams, manipulating compressed files, and working with gzip, zlib, and deflate formats.
