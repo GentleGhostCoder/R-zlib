@@ -83,3 +83,4 @@ venv.bak/
 /..Rcheck/
 /html/
 /renv/.cache/
+*Rcheck*
