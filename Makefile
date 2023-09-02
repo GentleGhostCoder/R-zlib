@@ -13,6 +13,7 @@ clean:
 	@Rscript -e "devtools::document()"
 	@Rscript -e "devtools::install_dev_deps()"
 	@Rscript -e "Rcpp::compileAttributes()"
+	@Rscript -e "renv::restore()"
 
 check:
 	cppcheck src --error-exitcode=1
