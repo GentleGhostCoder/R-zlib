@@ -84,7 +84,6 @@ zlib <- NULL
 
 }
 
-
 #' Create a Compression Object
 #'
 #' `compressobj` initializes a new compression object with specified parameters
@@ -133,7 +132,6 @@ compressobj <- function(level=-1, method=zlib$DEFLATED, wbits=zlib$MAX_WBITS, me
     }
   }))
 }
-
 
 #' Create a new decompressor object
 #'
