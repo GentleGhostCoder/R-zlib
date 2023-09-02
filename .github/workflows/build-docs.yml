@@ -88,6 +88,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./html # folder containing the html files
-          github_token: ${{ github.token }} # Use the built-in GitHub Actions token
+          publish_dir: ./html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
