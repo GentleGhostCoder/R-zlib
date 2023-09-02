@@ -1,0 +1,277 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "zlib"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "zlib-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('zlib')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("compress_chunk")
+> ### * compress_chunk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compress_chunk
+> ### Title: Compress a Chunk of Data
+> ### Aliases: compress_chunk
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D compressor <- create_compressor()
+> ##D compressed_data <- compress_chunk(compressor, charToRaw("Hello, World"))
+> ##D compressed_data <- c(compressed_data, flush_compressor_buffer(compressor))
+> ##D decompressed_data <- memDecompress(compressed_data, type = "gzip")
+> ##D cat(rawToChar(decompressed_data))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compress_chunk", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("compressobj")
+> ### * compressobj
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compressobj
+> ### Title: Create a Compression Object
+> ### Aliases: compressobj
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D comp_obj <- compressobj(level = 6)
+> ##D compressed_data <- comp_obj$compress("some data")
+> ##D flushed_data <- comp_obj$flush()
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compressobj", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("create_compressor")
+> ### * create_compressor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: create_compressor
+> ### Title: Create a new compressor object
+> ### Aliases: create_compressor
+> 
+> ### ** Examples
+> 
+> compressor <- create_compressor(level = 6, memLevel = 8)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("create_compressor", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("create_decompressor")
+> ### * create_decompressor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: create_decompressor
+> ### Title: Create a new decompressor object
+> ### Aliases: create_decompressor
+> 
+> ### ** Examples
+> 
+> decompressor <- create_decompressor()
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("create_decompressor", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("decompress_chunk")
+> ### * decompress_chunk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: decompress_chunk
+> ### Title: Decompress a chunk of data
+> ### Aliases: decompress_chunk
+> 
+> ### ** Examples
+> 
+> rawToChar(decompress_chunk(create_decompressor(), memCompress(charToRaw("Hello, World"))))
+[1] "Hello, World"
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("decompress_chunk", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("decompressobj")
+> ### * decompressobj
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: decompressobj
+> ### Title: Create a new decompressor object
+> ### Aliases: decompressobj
+> 
+> ### ** Examples
+> 
+> # Create a decompressor with default window size
+> decompressor <- decompressobj()
+> 
+> # Create a decompressor with a specific window size
+> decompressor <- decompressobj(wbits = zlib$MAX_WBITS)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("decompressobj", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("flush_compressor_buffer")
+> ### * flush_compressor_buffer
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: flush_compressor_buffer
+> ### Title: Flush the internal buffer of the compressor object.
+> ### Aliases: flush_compressor_buffer
+> 
+> ### ** Examples
+> 
+> compressor <- create_compressor()
+> # ... (some compression actions)
+> flushed_data <- flush_compressor_buffer(compressor)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("flush_compressor_buffer", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("flush_decompressor_buffer")
+> ### * flush_decompressor_buffer
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: flush_decompressor_buffer
+> ### Title: Flush the internal buffer of the decompressor object.
+> ### Aliases: flush_decompressor_buffer
+> 
+> ### ** Examples
+> 
+> decompressor <- create_decompressor()
+> # ... (some decompression actions)
+> flushed_data <- flush_decompressor_buffer(decompressor)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("flush_decompressor_buffer", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("publicEval")
+> ### * publicEval
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: publicEval
+> ### Title: Evaluate Expression with Public and Private Environments
+> ### Aliases: publicEval
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D publicEnv <- publicEval({
+> ##D   private$hidden_var <- "I am hidden"
+> ##D   public_var <- "I am public"
+> ##D }, parentEnv = parent.frame(), name = "MyEnvironment")
+> ##D 
+> ##D print(exists("public_var", envir = publicEnv))  # Should return TRUE
+> ##D print(exists("hidden_var", envir = publicEnv))  # Should return FALSE
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("publicEval", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("validate_gzip_file")
+> ### * validate_gzip_file
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: validate_gzip_file
+> ### Title: Validate if a File is a Valid Gzip File
+> ### Aliases: validate_gzip_file
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D validate_gzip_file("path/to/your/file.gz")
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("validate_gzip_file", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.317 0.007 0.325 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

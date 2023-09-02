@@ -1,0 +1,13 @@
+compress_chunk          Compress a Chunk of Data
+compressobj             Create a Compression Object
+create_compressor       Create a new compressor object
+create_decompressor     Create a new decompressor object
+decompress_chunk        Decompress a chunk of data
+decompressobj           Create a new decompressor object
+flush_compressor_buffer
+                        Flush the internal buffer of the compressor
+                        object.
+flush_decompressor_buffer
+                        Flush the internal buffer of the decompressor
+                        object.
+validate_gzip_file      Validate if a File is a Valid Gzip File

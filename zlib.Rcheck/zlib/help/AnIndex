@@ -1,0 +1,13 @@
+.onLoad	zlib
+compressobj	compressobj
+compress_chunk	compress_chunk
+create_compressor	create_compressor
+create_decompressor	create_decompressor
+decompressobj	decompressobj
+decompress_chunk	decompress_chunk
+flush_compressor_buffer	flush_compressor_buffer
+flush_decompressor_buffer	flush_decompressor_buffer
+publicEval	publicEval
+validate_gzip_file	validate_gzip_file
+zlib	zlib
+zlib_constants	zlib_constants

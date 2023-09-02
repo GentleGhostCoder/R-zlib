@@ -40,7 +40,7 @@ jobs:
 
       - name: build artifact
         run: |
-          make build
+          make build-check
 
       - name: Upload tarball artifact
         uses: actions/upload-artifact@v3

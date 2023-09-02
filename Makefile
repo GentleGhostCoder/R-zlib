@@ -30,6 +30,9 @@ build: clean .compile
 	@mkdir -p dist
 	@Rscript -e "devtools::build( path = 'dist' )"
 
+build-check: build
+	@ R CMD check --as-cran dist/zlib*
+
 test:
 	@Rscript -e "testthat::test_dir('tests')"
 

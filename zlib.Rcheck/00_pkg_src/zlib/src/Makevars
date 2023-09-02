@@ -1,0 +1,15 @@
+.PHONY: clean all
+
+# All include directories of renv libraries (e.g. Rcpp) and also Rinternals
+all:
+    PKG_CXXFLAGS = -I$(R_HOME)/include -I../inst/include -I./  `$(R_HOME)/bin/Rscript -e "Rcpp:::CxxFlags()"`
+	PKG_LIBS = -lz
+	CC=gcc
+	CXX=g++
+	CXX_STD = CXX17
+
+
+clean:
+	@echo "Cleaning up..."
+	@rm -f **/*.so **/*.o **/RcppExports.cpp
+	@echo "Cleaned up artifacts."
