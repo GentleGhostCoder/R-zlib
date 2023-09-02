@@ -9,7 +9,7 @@ clean:
 	rm -f **/*.so **/*.o **/RcppExports.cpp
 
 .compile:
-	@Rscript -e "if(!require('devtools')) install.packages('devtools')"
+	@Rscript -e "install.packages('devtools')"
 	@Rscript -e "devtools::document()"
 	@Rscript -e "devtools::install_dev_deps()"
 	@Rscript -e "Rcpp::compileAttributes()"
@@ -37,4 +37,4 @@ install: clean .compile
 	@Rscript -e "devtools::install()"
 
 install-fast:
-	@Rscript -e "devtools::install()"
+	R CMD INSTALL .
