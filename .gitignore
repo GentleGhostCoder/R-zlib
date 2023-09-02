@@ -1,0 +1,84 @@
+
+# fleet
+.fleet
+
+# C extensions
+*.so
+
+# CPP extensions
+*cmake-build-debug*
+*.o
+
+# Html artifacts
+*.html
+
+# Translations
+*.mo
+*.pot
+*po*
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Pyre type checker
+.pyre/
+
+# Jetbrains IDE
+.idea/
+
+# Coala
+*.orig
+
+# DB files
+*.db
+
+# vscode
+.vscode*
+
+# R stuff
+.Rproj.user/
+.Rhistory
+.RData
+/scratch/
+/dist/
+/build/
+/inst/include/
+/inst/lib/
+
+/inst/ext/patch/
+/inst/lib64/
+/inst/bin/
+/..Rcheck/
+/html/

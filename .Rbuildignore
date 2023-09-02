@@ -1,0 +1,13 @@
+^renv$
+^renv\.lock$
+^.*\.Rproj$
+^\.Rproj\.user$
+^.*cmake-build-debug.*$
+.github
+.idea
+CMakeLists.txt
+Makefile
+cmake
+dist
+docs
+scratch

@@ -1,0 +1,6 @@
+[submodule "ext/patch"]
+	path = ext/patch
+	url = https://github.com/r-rudra/patch.git
+[submodule "ext/libdeflate"]
+	path = ext/libdeflate
+	url = https://github.com/ebiggers/libdeflate.git

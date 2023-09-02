@@ -1,0 +1,49 @@
+name: Build tarball artifact on release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache renv packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            renv/library
+          key: ${{ runner.os }}-renv
+
+      # these are mostly dependecies for dev / build
+      - name: Install system dependencies
+        run: |
+          echo $RUNNER_OS &&
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install -y libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev;
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            echo "not implemented"
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            echo "not implemented"
+          else
+            echo "$RUNNER_OS not supported";
+            exit 1
+          fi
+        shell: bash
+        
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: build artifact
+        run: |
+          make build
+
+      - name: Upload tarball artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zlib
+          path: dist/zlib*
