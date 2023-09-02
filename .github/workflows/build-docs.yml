@@ -67,26 +67,11 @@ jobs:
           make docs
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
-          name: html-artifact
-          path: ./html
-
-  deploy-pages:
-    runs-on: ubuntu-latest
-    needs: build-pages
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: html-artifact
-          path: ./html
+          # Upload entire repository
+          path: './html'
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./html
-          github_token: ${{ secrets.PAT_TOKEN }}
+        id: deployment
+        uses: actions/deploy-pages@v2
