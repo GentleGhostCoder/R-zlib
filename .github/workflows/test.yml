@@ -40,7 +40,7 @@ jobs:
         run: |
           echo $RUNNER_OS &&
           if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install -y cppcheck;
+            sudo apt-get install -y cppcheck texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra;
           elif [ "$RUNNER_OS" == "macOS" ]; then
             echo "not implemented"
           elif [ "$RUNNER_OS" == "Windows" ]; then
@@ -62,6 +62,7 @@ jobs:
         run: |
           make check
           make check
+          make build-check
 
       - name: Run tests
         run: |

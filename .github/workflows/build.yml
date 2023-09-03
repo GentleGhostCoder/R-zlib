@@ -24,7 +24,7 @@ jobs:
         run: |
           echo $RUNNER_OS &&
           if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install -y libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev pdflatex;
+            sudo apt-get install -y libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev;
           elif [ "$RUNNER_OS" == "macOS" ]; then
             echo "not implemented"
           elif [ "$RUNNER_OS" == "Windows" ]; then
@@ -40,7 +40,7 @@ jobs:
 
       - name: build artifact
         run: |
-          make build-check
+          make build
 
       - name: Upload tarball artifact
         uses: actions/upload-artifact@v3
