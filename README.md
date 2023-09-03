@@ -101,7 +101,7 @@ By following these steps, you can successfully compress and decompress data in c
 
 ## Why Another Zlib Package for R?
 
-Hello, and welcome to my zlib package! You might wonder, "Why do we need another zlib package when R already has built-in methods for compression and decompression?" Let me clarify why I decided to develop this package.
+You might wonder, "Why do we need another zlib package when R already has built-in methods for compression and decompression?" Let me clarify why I decided to develop this package.
 
 #### The Problems with Built-in Methods
 
@@ -110,84 +110,79 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
 1. **Handling Corrupt Data**: Functions like `memDecompress` are unstable when dealing with gzip bytes that may be corrupt. If the data has multiple header blocks or too small a chunk, the function doesn't just fail—it can even crash your computer.
    *Incomplete Data Stream*: A too-small chunk can hang your system when using
    ```R  
-      compressed_data <- memCompress(charToRaw(paste0(rep("This is an example string. It contains more than just 'hello, world!'", 1000), collapse = ", ")))  
-      rawToChar(memDecompress(compressed_data[1:300], type="gzip"))    # Caused a hang-up    
-      readLines(gzcon(rawConnection(compressed_data[1:300])))    
-      # Warnung in readLines(gzcon(rawConnection(compressed_data[1:300])))    
-      # unvollständige letzte Zeile in 'gzcon(compressed_data[1:300])' gefunden    
-      # [1] "x\x9c\...."  
+   compressed_data <- memCompress(charToRaw(paste0(rep("This is an example string. It contains more than just 'hello, world!'", 1000), collapse = ", ")))  
+   rawToChar(memDecompress(compressed_data[1:300], type="gzip"))    # Caused a hang-up    
+   readLines(gzcon(rawConnection(compressed_data[1:300])))    
+   # Warnung in readLines(gzcon(rawConnection(compressed_data[1:300])))    
+   # unvollständige letzte Zeile in 'gzcon(compressed_data[1:300])' gefunden    
+   # [1] "x\x9c\...."  
    ```  
    *Multiple Header Blocks*: R's `memDecompress` doesn't handle gzip data with multiple headers well.
    ```R  
-      multi_header_compressed_data_15wbits <- c(memCompress(charToRaw("Hello World"), type="gzip"),memCompress(charToRaw("Hello World"), type="gzip"))  
-      rawToChar(memDecompress(multi_header_compressed_data_15wbits, type="gzip"))  # Returns only one compressed header  
+   multi_header_compressed_data_15wbits <- c(memCompress(charToRaw("Hello World"), type="gzip"),memCompress(charToRaw("Hello World"), type="gzip"))  
+   rawToChar(memDecompress(multi_header_compressed_data_15wbits, type="gzip"))  # Returns only one compressed header  
    ```
    Whereas, using `pigz` or `gzip` with pipes returns the expected concatenated strings:
    ```R  
-      tmp_file <- tempfile(fileext=".gzip")  
-      writeBin(multi_header_compressed_data_15wbits, tmp_file)   
-      readLines(pipe(sprintf("pigz -c -d %s --verbose 2>/dev/null", tmp_file), open = "rb")) # working correct but with warning   
-      # Warnung in readLines(pipe(sprintf("pigz -c -d %s --verbose 2>/dev/null",   
-      # unvollständige letzte Zeile in 'pigz -c -d /tmp/Rtmp5IRHIZ/file44665a0e2eb2.gzip --verbose 2>/dev/null' gefunden   
-      # [1] "Hello WorldHello World"   
-      readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file), open = "rb")) # not working becouse of the wrong wbits (see next point)   
-      # character(0)  
+   tmp_file <- tempfile(fileext=".gzip")  
+   writeBin(multi_header_compressed_data_15wbits, tmp_file)   
+   readLines(pipe(sprintf("pigz -c -d %s --verbose 2>/dev/null", tmp_file), open = "rb")) # working correct but with warning   
+   # Warnung in readLines(pipe(sprintf("pigz -c -d %s --verbose 2>/dev/null",   
+   # unvollständige letzte Zeile in 'pigz -c -d /tmp/Rtmp5IRHIZ/file44665a0e2eb2.gzip --verbose 2>/dev/null' gefunden   
+   # [1] "Hello WorldHello World"   
+   readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file), open = "rb")) # not working becouse of the wrong wbits (see next point)   
+   # character(0)  
    ```
 
 2. **GZIP File Format Specification**: R's `memCompress` doesn't adhere strictly to the GZIP File Format Specification, particularly regarding the usage of window bits.
-
    ```R  
-      memCompress("Hello World", type="gzip")  # Incorrect 15 wbits  
-      # [1] 78 9c f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 18 0b 04 1d  
+   memCompress("Hello World", type="gzip")  # Incorrect 15 wbits  
+   # [1] 78 9c f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 18 0b 04 1d  
    ```
-
    [Official GZIP File Format Specification](https://www.ietf.org/rfc/rfc1952.txt)
-
-3. **Incorrect Behavior with Different `wbits`**: The behavior of `memCompress` is inconsistent when different `wbits` are used for compression and decompression.
-
+   *Incorrect Behavior with Different `wbits`*: The behavior of `memCompress` is inconsistent when different `wbits` are used for compression and decompression.
    ```R  
-      compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
-      multi_header_compressed_data_31wbits <- c(c(compressor$compress(charToRaw("Hello World")), compressor$flush()), c(compressor$compress(charToRaw("Hello World")), compressor$flush()))    
-      readLines(gzcon(rawConnection(multi_header_compressed_data_31wbits))) # returns a single line if the gzip wbits are correct!      
-      # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data_31wbit)))      
-      # unvollständige letzte Zeile in 'gzcon(wrong_compressed_data_31wbit)' gefunden      
-      # [1] "Hello World"    
-      readLines(gzcon(rawConnection(multi_header_compressed_data_15wbits)))      
-      # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data)))  
-      # Zeile 1 scheint ein nul Zeichen zu enthalten      
-      # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data)))      
-      # unvollständige letzte Zeile in 'gzcon(wrong_compressed_data)' gefunden      
-      # [1] "x\x9c\xf3H\xcd\xc9\xc9W\b\xcf/\xcaI\001"    
-      tmp_file <- tempfile(fileext=".gzip")   
-      writeBin(multi_header_compressed_data_31wbits, tmp_file)    
-      readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file), open = "rb")) # gzip pipe works with correct wbits      
-      # Warnung in readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file),      
-      # unvollständige letzte Zeile in 'gzip -d /tmp/RtmpPIZPMP/file6eed29844dc4.gzip --verbose --stdout' gefunden      
-      # [1] "Hello WorldHello World"  
+   compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
+   multi_header_compressed_data_31wbits <- c(c(compressor$compress(charToRaw("Hello World")), compressor$flush()), c(compressor$compress(charToRaw("Hello World")), compressor$flush()))    
+   readLines(gzcon(rawConnection(multi_header_compressed_data_31wbits))) # returns a single line if the gzip wbits are correct!      
+   # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data_31wbit)))      
+   # unvollständige letzte Zeile in 'gzcon(wrong_compressed_data_31wbit)' gefunden      
+   # [1] "Hello World"    
+   readLines(gzcon(rawConnection(multi_header_compressed_data_15wbits)))      
+   # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data)))  
+   # Zeile 1 scheint ein nul Zeichen zu enthalten      
+   # Warnung in readLines(gzcon(rawConnection(wrong_compressed_data)))      
+   # unvollständige letzte Zeile in 'gzcon(wrong_compressed_data)' gefunden      
+   # [1] "x\x9c\xf3H\xcd\xc9\xc9W\b\xcf/\xcaI\001"    
+   tmp_file <- tempfile(fileext=".gzip")   
+   writeBin(multi_header_compressed_data_31wbits, tmp_file)    
+   readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file), open = "rb")) # gzip pipe works with correct wbits      
+   # Warnung in readLines(pipe(sprintf("gzip -d %s --verbose --stdout", tmp_file),      
+   # unvollständige letzte Zeile in 'gzip -d /tmp/RtmpPIZPMP/file6eed29844dc4.gzip --verbose --stdout' gefunden      
+   # [1] "Hello WorldHello World"  
    ```
 
-4. **No Streaming Support**: There's no native way to handle Gzip streams from REST APIs or other data streams without creating temporary files or implementing cumbersome workarounds (e.g. with pipes and tmp files).
+3. **No Streaming Support**: There's no native way to handle Gzip streams from REST APIs or other data streams without creating temporary files or implementing cumbersome workarounds (e.g. with pipes and tmp files).
 
 #### What My Package Offers
 
 1. **Robustness**: Built to handle even corrupted or incomplete gzip data efficiently without causing system failures.
 
    ```R  
-      compressed_data <- memCompress(charToRaw(paste0(rep("This is an example string. It contains more than just 'hello, world!'", 1000), collapse = ", ")))  
-      decompressor <- zlib$decompressobj(zlib$MAX_WBITS)    
-      rawToChar(c(decompressor$decompress(compressed_data[1:300]), decompressor$flush()))  # Still working  
+   compressed_data <- memCompress(charToRaw(paste0(rep("This is an example string. It contains more than just 'hello, world!'", 1000), collapse = ", ")))  
+   decompressor <- zlib$decompressobj(zlib$MAX_WBITS)    
+   rawToChar(c(decompressor$decompress(compressed_data[1:300]), decompressor$flush()))  # Still working  
    ```
 
 2. **Compliance**: Strict adherence to the GZIP File Format Specification, ensuring compatibility across systems.
 
    ```R  
-      compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
-      c(compressor$compress(charToRaw("Hello World")), compressor$flush())  # Correct 31 wbits    
-      # [1] 1f 8b 08 00 00 00 00 00 00 03 f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 56 b1 17 4a 0b 00 00 00  
+   compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
+   c(compressor$compress(charToRaw("Hello World")), compressor$flush())  # Correct 31 wbits (or custom wbits you provide)
+   # [1] 1f 8b 08 00 00 00 00 00 00 03 f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 56 b1 17 4a 0b 00 00 00  
    ```
 
 3. **Flexibility**: Ability to manage Gzip streams from REST APIs without the need for temporary files or other workarounds.
-
 
 In summary, while R’s built-in methods could someday catch up in functionality, my zlib package for now fills an important gap by providing a more robust and flexible way to handle compression and decompression tasks.
 
