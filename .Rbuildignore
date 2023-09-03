@@ -11,3 +11,5 @@ cmake
 dist
 docs
 scratch
+^LICENSE\.md$
+html

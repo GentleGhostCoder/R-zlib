@@ -6,6 +6,7 @@ all: clean
 	gcc -v
 
 clean:
+	rm -rf dist
 	rm -f **/*.so **/*.o **/RcppExports.cpp
 
 .compile:
@@ -17,7 +18,7 @@ clean:
 
 check:
 	cppcheck src --error-exitcode=1
-	@Rscript -e "devtools::check()"
+	@Rscript -e "devtools::check(cran=TRUE)"
 
 docs:
 	@rm html -rf
