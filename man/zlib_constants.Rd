@@ -4,7 +4,7 @@
 \alias{zlib_constants}
 \title{Retrieve zlib Constants}
 \usage{
-constants <- zlib_constants()
+zlib_constants()
 }
 \value{
 A named list of zlib constants.
@@ -35,5 +35,10 @@ The constants are defined as follows:
 \item \code{Z_SYNC_FLUSH}: Synchronized flush mode, set to 2.
 \item \code{Z_TREES}: Tree block compression mode, set to 6.
 }
+}
+\examples{
+\dontrun{
+ constants <- zlib_constants()
+ }
 }
 \keyword{internal}

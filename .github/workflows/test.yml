@@ -36,7 +36,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Install cppcheck
+      - name: Install deps for checks
         run: |
           echo $RUNNER_OS &&
           if [ "$RUNNER_OS" == "Linux" ]; then
