@@ -161,6 +161,3 @@ sudo yum install cmake ninja-build R libblas-devel liblapack-devel gcc-c++
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-Feel free to modify this template to better suit the specifics of your project.
