@@ -17,7 +17,10 @@ Suggests:
   testthat (>= 3.0.0),
   remotes (>= 2.4.2),
   roxygen2md (>= 1.0.0),
-  rmarkdown (>= 2.21)
+  rmarkdown (>= 2.21),
+  covr (>= 3.6.2),
+  DT (>= 0.29),
+  htmltools (>= 0.5.6)
 LinkingTo: Rcpp
 Encoding: UTF-8
 Language: en-US

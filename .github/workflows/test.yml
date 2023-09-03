@@ -67,3 +67,7 @@ jobs:
       - name: Run tests
         run: |
           make test
+
+      - name: Upload Coverage
+        run: |
+          Rscript -e 'covr::codecov(token = "${{ secrets.CODECOV_TOKEN }}")'
