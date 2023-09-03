@@ -13,3 +13,4 @@ docs
 scratch
 ^LICENSE\.md$
 html
+.covrignore

@@ -20,7 +20,7 @@ check:
 	cppcheck src --error-exitcode=1
 	@Rscript -e "devtools::check(cran=TRUE)"
 
-docs:
+docs: coverage
 	@rm html -rf
 	@Rscript -e "devtools::document()"
 	@Rscript docs/generate_docs.R
@@ -36,6 +36,9 @@ build-check: build
 
 test:
 	@Rscript -e "testthat::test_dir('tests')"
+
+coverage:
+	@Rscript -e "covr::report(file = 'html/coverage.html')"
 
 install: clean .compile
 	@Rscript -e "devtools::install()"
