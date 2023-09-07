@@ -1,5 +1,5 @@
 Package: zlib
-Version: 1.0.1
+Version: 1.0.0
 Type: Package
 Title: Compression and Decompression
 Authors@R: person("Semjon", "Geist", role = c("aut", "cre"),
