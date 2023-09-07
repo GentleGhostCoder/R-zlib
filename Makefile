@@ -146,7 +146,8 @@ release: pr-merge-if-ready
     		echo "There are open PRs targeting the main branch. Resolve them before creating a tag."; \
     		exit 1; \
     	fi && \
-	VERSION=$$(poetry version -s) && \
+	FILE="DESCRIPTION"; \
+	VERSION=$$(grep -E "^Version:" $$FILE | awk '{print $$2}'); \
 	echo "Detected version: $$VERSION" && \
 	if git rev-parse "$$VERSION" >/dev/null 2>&1; then \
 		echo "Tag $$VERSION already exists."; \
