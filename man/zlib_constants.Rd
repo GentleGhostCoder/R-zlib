@@ -37,8 +37,6 @@ The constants are defined as follows:
 }
 }
 \examples{
-\dontrun{
- constants <- zlib_constants()
- }
+constants <- zlib_constants()
 }
 \keyword{internal}

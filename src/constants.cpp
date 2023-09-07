@@ -32,9 +32,7 @@ using namespace Rcpp;
 //'
 //' @return A named list of zlib constants.
 //' @examples
-//' \dontrun{
-//'  constants <- zlib_constants()
-//'  }
+//' constants <- zlib_constants()
 //' @keywords internal
 // [[Rcpp::export]]
 List zlib_constants() {

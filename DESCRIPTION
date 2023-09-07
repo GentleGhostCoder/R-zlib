@@ -8,7 +8,7 @@ Author: Semjon Geist [aut, cre]
 License: MIT + file LICENSE
 URL: https://github.com/sgeist-ionos/R-zlib
 BugReports: https://github.com/sgeist-ionos/R-zlib/issues
-Description: The `zlib` package for R aims to offer an R-based equivalent of Python's built-in `zlib` module for data compression and decompression. This package provides a suite of functions for working with zlib compression, including utilities for compressing and decompressing data streams, manipulating compressed files, and working with `gzip`, `zlib` and deflate formats.
+Description: The 'zlib' package for R aims to offer an R-based equivalent of Python's built-in 'zlib' module for data compression and decompression. This package provides a suite of functions for working with zlib compression, including utilities for compressing and decompressing data streams, manipulating compressed files, and working with 'gzip', 'zlib' and deflate formats.
 Depends:
   R (>= 3.6.0)
 Imports: Rcpp (>= 1.0.9)

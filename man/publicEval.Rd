@@ -32,7 +32,6 @@ variable scope and encapsulation.
 }
 
 \examples{
-\dontrun{
 publicEnv <- publicEval({
   private$hidden_var <- "I am hidden"
   public_var <- "I am public"
@@ -40,7 +39,6 @@ publicEnv <- publicEval({
 
 print(exists("public_var", envir = publicEnv))  # Should return TRUE
 print(exists("hidden_var", envir = publicEnv))  # Should return FALSE
-}
 
 }
 \keyword{internal}
