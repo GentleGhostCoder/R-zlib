@@ -5,7 +5,7 @@
 
 [![Build tarball artifact on release](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build.yml/badge.svg)](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build.yml)
 
-[![codecov](https://codecov.io/gh/sgeist-ionos/R-zlib/graph/badge.svg?token=WRBNXIMB3N)](https://codecov.io/gh/sgeist-ionos/R-zlib)
+[![codecov](https://codecov.io/gh/sgeist-ionos/R-zlib/graph/badge.svg?token=WRBNXIMB3N)](https://app.codecov.io/gh/sgeist-ionos/R-zlib)
 
 ## Description
 
