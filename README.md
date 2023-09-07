@@ -177,7 +177,7 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
 2. **Compliance**: Strict adherence to the GZIP File Format Specification, ensuring compatibility across systems.
 
    ```R  
-   compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
+   compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)
    c(compressor$compress(charToRaw("Hello World")), compressor$flush())  # Correct 31 wbits (or custom wbits you provide)
    # [1] 1f 8b 08 00 00 00 00 00 00 03 f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 56 b1 17 4a 0b 00 00 00  
    ```
@@ -185,6 +185,29 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
 3. **Flexibility**: Ability to manage Gzip streams from REST APIs without the need for temporary files or other workarounds.
 
 In summary, while R’s built-in methods could someday catch up in functionality, my zlib package for now fills an important gap by providing a more robust and flexible way to handle compression and decompression tasks.
+
+
+## Little Benchmark
+
+The following benchmark compares the performance of the `zlib` package with the built-in `memCompress` and `memDecompress` functions. 
+The benchmark was run on a Latitude 7430 with a 12th Gen Intel(R) Core(TM) i5-1245U (12) @ 4.4 GHz Processor and 32 GB of RAM.
+
+```R
+library(zlib)
+example_data <- charToRaw(paste0(rep("This is an example string. It contains more than just 'hello, world!'", 1000), collapse = "\n"))
+microbenchmark::microbenchmark({
+   compressed_data <- memCompress(example_data, type="gzip")
+   decompressed_data <- memDecompress(compressed_data, type="gzip")
+}, {
+   compressor <- zlib$compressobj()
+   compressed_data <- c(compressor$compress(example_data), compressor$flush())
+   decompressor <- zlib$decompressobj()
+   decompressed_data <- c(decompressor$decompress(compressed_data), decompressor$flush())
+}, times = 5000)
+# min       lq     mean      median     uq      max    neval
+# 277.041 323.6640 408.4731 363.7165 395.5025 7931.280  5000
+# 203.626 255.7815 308.8654 297.2095 337.2320 6864.512  5000
+```
 
 ## Future Enhancements
 

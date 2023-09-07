@@ -19,11 +19,19 @@ Initializes a new decompressor object for zlib-based decompression.
 The returned decompressor object has methods for performing chunk-wise
 decompression on compressed data using the zlib library.
 }
-\examples{
-# Create a decompressor with default window size
-decompressor <- decompressobj()
+\section{Methods}{
 
-# Create a decompressor with a specific window size
-decompressor <- decompressobj(wbits = zlib$MAX_WBITS)
+\itemize{
+\item \code{decompress(data)}: Compresses a chunk of data.
+\item \code{flush()}: Flushes the compression buffer.
+}
+}
+
+\examples{
+compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)
+compressed_data <- compressor$compress(charToRaw("some data"))
+compressed_data <- c(compressed_data, compressor$flush())
+decompressor <- decompressobj(zlib$MAX_WBITS + 16)
+decompressed_data <- c(decompressor$decompress(compressed_data), decompressor$flush())
 
 }

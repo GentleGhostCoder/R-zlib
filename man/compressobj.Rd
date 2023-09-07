@@ -42,10 +42,8 @@ and methods. The function makes use of \code{publicEval} to manage scope and enc
 }
 
 \examples{
-\dontrun{
-comp_obj <- compressobj(level = 6)
-compressed_data <- comp_obj$compress("some data")
-flushed_data <- comp_obj$flush()
-}
+compressor <- compressobj(level = 6)
+compressed_data <- compressor$compress(charToRaw("some data"))
+compressed_data <- c(compressed_data, compressor$flush())
 
 }

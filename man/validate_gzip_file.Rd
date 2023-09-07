@@ -19,7 +19,5 @@ It reads the file in chunks and tries to decompress it using the zlib library.
 If any step fails, the function returns \code{FALSE}. Otherwise, it returns \code{TRUE}.
 }
 \examples{
-\dontrun{
 validate_gzip_file("path/to/your/file.gz")
-}
 }

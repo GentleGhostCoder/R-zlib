@@ -11,9 +11,7 @@
 //' @return A boolean value indicating whether the file is a valid gzip file.
 //'         \code{TRUE} if the file is valid, \code{FALSE} otherwise.
 //' @examples
-//' \dontrun{
 //' validate_gzip_file("path/to/your/file.gz")
-//' }
 //' @export
 // [[Rcpp::export]]
 bool validate_gzip_file(const std::string& file_path) {

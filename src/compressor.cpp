@@ -74,14 +74,12 @@ SEXP create_compressor(int level = -1, int method = 8, int wbits = 15,
 //' It takes a chunk of raw data and compresses it, returning a raw vector of the compressed data.
 //'
 //' @examples
-//' \dontrun{
-//' compressor <- create_compressor()
-//' compressed_data <- compress_chunk(compressor, charToRaw("Hello, World"))
-//' compressed_data <- c(compressed_data, flush_compressor_buffer(compressor))
+//' # Create a new compressor object for zlib -> wbts = 15
+//' zlib_compressor <- create_compressor(wbits=31)
+//' compressed_data <- compress_chunk(zlib_compressor, charToRaw("Hello, World"))
+//' compressed_data <- c(compressed_data, flush_compressor_buffer(zlib_compressor))
 //' decompressed_data <- memDecompress(compressed_data, type = "gzip")
 //' cat(rawToChar(decompressed_data))
-//' }
-//'
 //' @export
 // [[Rcpp::export]]
 RawVector compress_chunk(SEXP compressorPtr, const RawVector& input_chunk) {
