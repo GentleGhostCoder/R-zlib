@@ -184,6 +184,46 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
 
 3. **Flexibility**: Ability to manage Gzip streams from REST APIs without the need for temporary files or other workarounds.
 
+   ```R
+   # Byte-Range Request and decompression in chunks
+   
+   # Initialize the decompressor
+   decompressor <- zlib$decompressobj(zlib$MAX_WBITS + 16)
+   
+   # Define the URL and initial byte ranges
+   url <- "https://example.com/api/data.gz"
+   range_start <- 0
+   range_increment <- 5000  # Adjust based on desired chunk size
+   
+   # Placeholder for the decompressed content
+   decompressed_content <- character(0)
+   
+   # Loop to make multiple requests and decompress chunk by chunk
+   for (i in 1:5) {  # Adjust the loop count based on the number of chunks you want to retrieve
+   range_end <- range_start + range_increment
+   
+   # Make a byte-range request
+   response <- httr::GET(url, httr::add_headers(`Range` = paste0("bytes=", range_start, "-", range_end)))
+   
+   # Check if the request was successful
+   if (httr::http_type(response) != "application/octet-stream" || httr::http_status(response)$category != "Success") {
+   stop("Failed to retrieve data.")
+   }
+   
+   # Decompress the received chunk
+   compressed_data <- httr::content(response, "raw")
+   decompressed_chunk <- decompressor$decompress(compressed_data)
+   decompressed_content <- c(decompressed_content, rawToChar(decompressed_chunk))
+   
+   # Update the byte range for the next request
+   range_start <- range_end + 1
+   }
+   
+   # Flush the decompressor after all chunks have been processed
+   final_data <- decompressor$flush()
+   decompressed_content <- c(decompressed_content, rawToChar(final_data))
+   ```
+
 In summary, while R’s built-in methods could someday catch up in functionality, my zlib package for now fills an important gap by providing a more robust and flexible way to handle compression and decompression tasks.
 
 
