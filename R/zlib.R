@@ -67,12 +67,23 @@ zlib <- NULL
 #' # Flush the decompressor buffer
 #' decompressed_data <- c(decompressed_data, decompressor$flush())
 #'
+#' # Comporess / Decompress data in a single step
+#'
+#' original_data <- charToRaw("some data")
+#' compressed_data <- zlib$compress(original_data,
+#'                                  zlib$Z_DEFAULT_COMPRESSION,
+#'                                  zlib$DEFLATED,
+#'                                  zlib$MAX_WBITS + 16)
+#' decompressed_data <- zlib$decompress(compressed_data, zlib$MAX_WBITS + 16)
+#'
 #' @details
 #' @title What My Package Offers
 #'
 #' @section Methods:
 #' * `compressobj(...)`: Create a compression object.
-#' * `decompressobj()`: Create a decompression object.
+#' * `decompressobj(...)`: Create a decompression object.
+#' * `compress(data, ...)`: Compress data in a single step.
+#' * `decompress(data, ...)`: Decompress data in a single step.
 #'
 #' @section Constants:
 #' * `DEFLATED`: The compression method, set to 8.
@@ -166,6 +177,8 @@ zlib <- NULL
     list2env(zlib_constants(), envir=environment())
     compressobj <- compressobj
     decompressobj <- decompressobj
+    compress <- compress
+    decompress <- decompress
   }, name="zlib"), envir = getNamespace(pkgname))
 }
 
@@ -304,4 +317,67 @@ decompressobj <- function(wbits = 0) {
       return(flush_decompressor_buffer(private$pointer, length = length))
     }
   }))
+}
+
+#' Single-step compression of raw data
+#'
+#' Compresses the provided raw data in a single step.
+#'
+#' @param data Raw data to be compressed.
+#' @param level Compression level, default is -1.
+#' @param method Compression method, default is `zlib$DEFLATED`.
+#' @param wbits Window bits, default is `zlib$MAX_WBITS`.
+#' @param memLevel Memory level, default is `zlib$DEF_MEM_LEVEL`.
+#' @param strategy Compression strategy, default is `zlib$Z_DEFAULT_STRATEGY`.
+#' @param zdict Optional predefined compression dictionary as a raw vector.
+#'
+#' @return A raw vector containing the compressed data.
+#'
+#' @details
+#' The `compress` function simplifies the compression process by encapsulating
+#' the creation of a compression object, compressing the data, and flushing the buffer
+#' all within a single call. This is particularly useful for scenarios where the user
+#' wants to quickly compress data without dealing with the intricacies of compression
+#' objects and buffer management. The function leverages the `compressobj` function
+#' to handle the underlying compression mechanics.
+#'
+#' @examples
+#' compressed_data <- compress(charToRaw("some data"))
+#'
+#' @export
+compress <- function(data, level=-1, method=zlib$DEFLATED, wbits=zlib$MAX_WBITS, memLevel=zlib$DEF_MEM_LEVEL, strategy=zlib$Z_DEFAULT_STRATEGY, zdict=NULL) {
+  compressor <- compressobj(level, method, wbits, memLevel, strategy, zdict)
+  compressed_data <- compressor$compress(data)
+  compressed_data <- c(compressed_data, compressor$flush())
+  return(compressed_data)
+}
+
+#' Single-step decompression of raw data
+#'
+#' Decompresses the provided compressed raw data in a single step.
+#'
+#' @param data Compressed raw data to be decompressed.
+#' @param wbits The window size bits parameter. Default is 0.
+#'
+#' @return A raw vector containing the decompressed data.
+#'
+#' @details
+#' The `decompress` function offers a streamlined approach to decompressing
+#' raw data. By abstracting the creation of a decompression object, decompressing
+#' the data, and flushing the buffer into one function call, it provides a hassle-free
+#' way to retrieve original data from its compressed form. This function is designed
+#' to work seamlessly with data compressed using the `compress` function or
+#' any other zlib-based compression method.
+#'
+#' @examples
+#' original_data <- charToRaw("some data")
+#' compressed_data <- compress(original_data)
+#' decompressed_data <- decompress(compressed_data)
+#'
+#' @export
+decompress <- function(data, wbits = 0) {
+  decompressor <- decompressobj(wbits)
+  decompressed_data <- decompressor$decompress(data)
+  decompressed_data <- c(decompressed_data, decompressor$flush())
+  return(decompressed_data)
 }

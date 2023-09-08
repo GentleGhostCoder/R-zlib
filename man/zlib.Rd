@@ -93,7 +93,9 @@ and various flush and compression strategies like \code{Z_FINISH},
 
 \itemize{
 \item \code{compressobj(...)}: Create a compression object.
-\item \code{decompressobj()}: Create a decompression object.
+\item \code{decompressobj(...)}: Create a decompression object.
+\item \code{compress(data, ...)}: Compress data in a single step.
+\item \code{decompress(data, ...)}: Decompress data in a single step.
 }
 }
 
@@ -169,6 +171,15 @@ for (i in seq(1, length(compressed_data), by = chunk_size)) {
 
 # Flush the decompressor buffer
 decompressed_data <- c(decompressed_data, decompressor$flush())
+
+# Comporess / Decompress data in a single step
+
+original_data <- charToRaw("some data")
+compressed_data <- zlib$compress(original_data,
+                                 zlib$Z_DEFAULT_COMPRESSION,
+                                 zlib$DEFLATED,
+                                 zlib$MAX_WBITS + 16)
+decompressed_data <- zlib$decompress(compressed_data, zlib$MAX_WBITS + 16)
 
 }
 \seealso{

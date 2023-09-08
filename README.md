@@ -136,10 +136,10 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
 
 2. **GZIP File Format Specification**: R's `memCompress` doesn't adhere strictly to the GZIP File Format Specification, particularly regarding the usage of window bits.
    ```R  
-   memCompress("Hello World", type="gzip")  # Incorrect 15 wbits  
+   memCompress("Hello World", type="gzip")  # Only 15 wbits -> without header checksum
    # [1] 78 9c f3 48 cd c9 c9 57 08 cf 2f ca 49 01 00 18 0b 04 1d  
    ```
-   [Official GZIP File Format Specification](https://www.ietf.org/rfc/rfc1952.txt)
+   [Official GZIP File Format Specification](https://www.zlib.net/manual.html)
    *Incorrect Behavior with Different `wbits`*: The behavior of `memCompress` is inconsistent when different `wbits` are used for compression and decompression.
    ```R  
    compressor <- zlib$compressobj(zlib$Z_DEFAULT_COMPRESSION, zlib$DEFLATED, zlib$MAX_WBITS + 16)  
@@ -162,7 +162,7 @@ R's built-in functions like `memDecompress` and `memCompress` are good for simpl
    # [1] "Hello WorldHello World"  
    ```
 
-3. **No Streaming Support**: There's no native way to handle Gzip streams from REST APIs or other data streams without creating temporary files or implementing cumbersome workarounds (e.g. with pipes and tmp files).
+3. **No Streaming Support**: There's no nati ve way to handle Gzip streams from REST APIs or other data streams without creating temporary files or implementing cumbersome workarounds (e.g. with pipes and tmp files).
 
 #### What My Package Offers
 
@@ -281,13 +281,15 @@ If any of these feature enhancements interest you, or if you have other suggesti
 ### Installing Dependencies on Ubuntu
 
 ```bash  
-sudo apt-get updatesudo apt-get install cmake ninja-build r-base libblas-dev liblapack-dev build-essential 
+sudo apt-get update
+sudo apt-get install cmake ninja-build r-base libblas-dev liblapack-dev build-essential 
 ```  
   
 ### Installing Dependencies on Red Hat  
   
 ```bash  
-sudo yum updatesudo yum install cmake ninja-build R libblas-devel liblapack-devel gcc-c++
+sudo yum update
+sudo yum install cmake ninja-build R libblas-devel liblapack-devel gcc-c++
 ```  
   
 ### Building  
