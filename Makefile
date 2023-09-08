@@ -105,7 +105,8 @@ pr: bump
 		exit 1; \
 	fi && \
 	BRANCH_NAME=$(shell git branch --show-current) && \
-	gh pr create --base main --head $$BRANCH_NAME --title "PR $$BRANCH_NAME - $(shell git describe --tags $(shell git rev-list --tags --max-count=1))" --body "$(filter-out $@,$(MAKECMDGOALS))"
+	VERSION=$(shell grep "^Version:" DESCRIPTION | awk '{print $$2}') && \
+	gh pr create --base main --head $$BRANCH_NAME --title "PR $$BRANCH_NAME - $$VERSION" --body "$(filter-out $@,$(MAKECMDGOALS))"
 
 pr-status:
 	@BRANCH_NAME=$(shell git branch --show-current) && \
