@@ -11,6 +11,10 @@
 
 The `zlib` package for R aims to offer an R-based equivalent of Python's built-in `zlib` module for data compression and decompression. This package provides a suite of functions for working with zlib compression, including utilities for compressing and decompressing data streams, manipulating compressed files, and working with `gzip`, `zlib` and deflate formats.
 
+## Post
+
+[Medium](https://medium.com/@1998semi/r-package-zlib-and-why-another-zlib-package-for-r-af1832c7471c)
+
 ## Usage
 
 This example demonstrates how to use the `zlib` Rcpp module for chunked compression and decompression. We will take a string, write it to a temporary file, and then read it back into a raw vector. Then we will compress and decompress the data using the `zlib` Rcpp module.
@@ -306,7 +310,7 @@ sudo yum install cmake ninja-build R libblas-devel liblapack-devel gcc-c++
    ```bash  
    make build   
    ``` 
-    
+
 ## License  
   
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
