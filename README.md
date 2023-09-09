@@ -25,6 +25,7 @@ To install the `zlib` package, you can use the following command:
 
 ```R  
 install.packages("zlib")  # Uncomment this line if zlib is hosted on CRAN or a similar repo```  
+```
 
 ### Code Example  
 
