@@ -16,7 +16,9 @@ A raw vector containing the remaining uncompressed output.
 }
 \description{
 This function processes all pending input and returns the remaining uncompressed output.
-After calling this function, the decompress_chunk() method cannot be called again on the same object.
+The function uses the provided initial buffer size and dynamically expands it as necessary
+to ensure all remaining data is decompressed. After calling this function, the
+decompress_chunk() method cannot be called again on the same object.
 }
 \examples{
 decompressor <- create_decompressor()
