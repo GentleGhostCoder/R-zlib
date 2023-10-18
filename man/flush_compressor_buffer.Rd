@@ -4,7 +4,7 @@
 \alias{flush_compressor_buffer}
 \title{Flush the internal buffer of the compressor object.}
 \usage{
-flush_compressor_buffer(compressorPtr, mode)
+flush_compressor_buffer(compressorPtr, mode = 4L)
 }
 \arguments{
 \item{compressorPtr}{A SEXP pointer to an existing compressor object.}
