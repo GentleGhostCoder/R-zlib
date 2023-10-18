@@ -82,11 +82,12 @@ RawVector decompress_chunk(SEXP decompressorPtr, const RawVector& input_chunk) {
   return {out.begin(), out.begin() + actual_out_diff};
 }
 
-
 //' Flush the internal buffer of the decompressor object.
 //'
 //' This function processes all pending input and returns the remaining uncompressed output.
-//' After calling this function, the decompress_chunk() method cannot be called again on the same object.
+//' The function uses the provided initial buffer size and dynamically expands it as necessary
+//' to ensure all remaining data is decompressed. After calling this function, the
+//' decompress_chunk() method cannot be called again on the same object.
 //' @param decompressorPtr A SEXP pointer to an existing decompressor object.
 //' @param length An optional parameter that sets the initial size of the output buffer. Default is 256.
 //' @return A raw vector containing the remaining uncompressed output.
@@ -97,32 +98,47 @@ RawVector decompress_chunk(SEXP decompressorPtr, const RawVector& input_chunk) {
 //' @export
 // [[Rcpp::export]]
 RawVector flush_decompressor_buffer(SEXP decompressorPtr, size_t length = 256) {
-  XPtr<Decompressor> decompressor(decompressorPtr);
-  if (!decompressor) {
-    stop("Invalid decompressor object");
-  }
+    XPtr<Decompressor> decompressor(decompressorPtr);
+    if (!decompressor) {
+        stop("Invalid decompressor object");
+    }
 
-  // If no buffer data, return an empty vector
-  if (decompressor->buffer.empty()) {
-    return RawVector::create();
-  }
+    if (decompressor->buffer.empty()) {
+        return RawVector::create();
+    }
 
-  decompressor->strm.avail_in = decompressor->buffer.size();
-  decompressor->strm.next_in = decompressor->buffer.data();
+    decompressor->strm.avail_in = decompressor->buffer.size();
+    decompressor->strm.next_in = decompressor->buffer.data();
 
-  // Use provided length for the output buffer size
-  std::vector<uint8_t> out(length);
-  decompressor->strm.avail_out = length;
-  decompressor->strm.next_out = out.data();
+    std::vector<uint8_t> output(length);
+    size_t total_decompressed = 0;
 
-  int ret = inflate(&decompressor->strm, Z_FINISH);
-  if (ret != Z_STREAM_END && ret != Z_OK && ret != Z_BUF_ERROR) {
-    Rcpp::Rcerr << "zlib error: " << (decompressor->strm.msg ? decompressor->strm.msg : "Unknown error") << std::endl;
-    stop("Flush failed");
-  }
+    int ret;
+    do {
+        if (total_decompressed == output.size()) {
+            output.resize(output.size() * 2);  // Double the buffer size
+        }
 
-  decompressor->buffer.clear();  // Clear the internal buffer as we've flushed it
+        decompressor->strm.avail_out = output.size() - total_decompressed;
+        decompressor->strm.next_out = &output[total_decompressed];
 
-  auto actual_out_diff = static_cast<std::vector<uint8_t>::difference_type>(length - decompressor->strm.avail_out);
-  return {out.begin(), out.begin() + actual_out_diff};
+        ret = inflate(&decompressor->strm, Z_FINISH);
+
+        if (ret < 0 && ret != Z_BUF_ERROR) {
+            Rcpp::Rcerr << "zlib error code: " << ret << " - "
+                        << (decompressor->strm.msg ? decompressor->strm.msg : "Unknown error") << std::endl;
+            stop("Flush failed");
+        }
+
+        total_decompressed = output.size() - decompressor->strm.avail_out;
+
+    } while (ret != Z_STREAM_END);
+
+    output.resize(total_decompressed);  // Trim the output to the actual decompressed size
+    decompressor->buffer.clear();       // Clear the internal buffer
+
+    return RawVector(output.begin(), output.end());
 }
+
+
+
