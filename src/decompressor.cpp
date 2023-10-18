@@ -114,25 +114,25 @@ RawVector flush_decompressor_buffer(SEXP decompressorPtr, size_t length = 256) {
     size_t total_decompressed = 0;
 
     int ret;
-    do {
-        if (total_decompressed == output.size()) {
-            output.resize(output.size() * 2);  // Double the buffer size
-        }
+   do {
+       if (total_decompressed == output.size()) {
+           output.resize(output.size() * 2);  // Double the buffer size
+       }
 
-        decompressor->strm.avail_out = output.size() - total_decompressed;
-        decompressor->strm.next_out = &output[total_decompressed];
+       decompressor->strm.avail_out = output.size() - total_decompressed;
+       decompressor->strm.next_out = &output[total_decompressed];
 
-        ret = inflate(&decompressor->strm, Z_FINISH);
+       ret = inflate(&decompressor->strm, Z_NO_FLUSH);
 
-        if (ret < 0 && ret != Z_BUF_ERROR) {
-            Rcpp::Rcerr << "zlib error code: " << ret << " - "
-                        << (decompressor->strm.msg ? decompressor->strm.msg : "Unknown error") << std::endl;
-            stop("Flush failed");
-        }
+       if (ret < 0 && ret != Z_BUF_ERROR) {
+           Rcpp::Rcerr << "zlib error code: " << ret << " - "
+                       << (decompressor->strm.msg ? decompressor->strm.msg : "Unknown error") << std::endl;
+           stop("Flush failed");
+       }
 
-        total_decompressed = output.size() - decompressor->strm.avail_out;
+       total_decompressed = output.size() - decompressor->strm.avail_out;
 
-    } while (ret != Z_STREAM_END);
+   } while (decompressor->strm.avail_in > 0 || ret == Z_BUF_ERROR);
 
     output.resize(total_decompressed);  // Trim the output to the actual decompressed size
     decompressor->buffer.clear();       // Clear the internal buffer

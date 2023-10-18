@@ -133,7 +133,7 @@ RawVector compress_chunk(SEXP compressorPtr, const RawVector& input_chunk) {
 //' flushed_data <- flush_compressor_buffer(compressor)
 //' @export
 // [[Rcpp::export]]
-RawVector flush_compressor_buffer(SEXP compressorPtr, int mode = 4) { // Use Z_FINISH here
+RawVector flush_compressor_buffer(SEXP compressorPtr, int mode = 4) {
   XPtr<Compressor> compressor(compressorPtr);
   if (!compressor) {
     stop("Invalid compressor object");
@@ -142,23 +142,36 @@ RawVector flush_compressor_buffer(SEXP compressorPtr, int mode = 4) { // Use Z_F
   compressor->strm.avail_in = 0; // No input data since we're just flushing
   compressor->strm.next_in = Z_NULL;
 
-  size_t available_out = 512; // Adjust this value as needed
-  std::vector<uint8_t> out(available_out);
-  compressor->strm.avail_out = available_out;
+  size_t initialSize = 512;  // Starting buffer size
+  std::vector<uint8_t> out(initialSize);
+  compressor->strm.avail_out = initialSize;
   compressor->strm.next_out = out.data();
 
-  int ret = deflate(&compressor->strm, mode);
+  int ret;
+ do {
+     ret = deflate(&compressor->strm, mode);
 
-  if (ret != Z_OK && ret != Z_STREAM_END) {
-    Rcpp::Rcerr << "zlib error: " << (compressor->strm.msg ? compressor->strm.msg : "Unknown error") << std::endl;
-    stop("Flush failed");
-  }
+     if (ret < 0 && ret != Z_BUF_ERROR) {
+       Rcpp::Rcerr << "zlib error: " << (compressor->strm.msg ? compressor->strm.msg : "Unknown error") << std::endl;
+       stop("Flush failed");
+     }
+
+     if (compressor->strm.avail_out == 0 || ret == Z_BUF_ERROR) {
+       // Double the buffer size if it's all used up
+       size_t oldSize = out.size();
+       out.resize(oldSize * 2);
+       compressor->strm.next_out = out.data() + oldSize;
+       compressor->strm.avail_out = oldSize;
+     }
+
+   } while (ret == Z_BUF_ERROR || (mode == Z_FINISH && ret != Z_STREAM_END)); // keep resizing until flush is complete or another error occurs
 
   if (mode == Z_FINISH && ret == Z_STREAM_END) {
     deflateReset(&compressor->strm);
     compressor->buffer.clear(); // Clear the internal buffer as we've flushed it
   }
 
-  auto actual_out_diff = static_cast<std::vector<uint8_t>::difference_type>(available_out - compressor->strm.avail_out);
+  auto actual_out_diff = out.size() - compressor->strm.avail_out;
   return {out.begin(), out.begin() + actual_out_diff};
 }
+
