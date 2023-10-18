@@ -133,7 +133,7 @@ RawVector compress_chunk(SEXP compressorPtr, const RawVector& input_chunk) {
 //' flushed_data <- flush_compressor_buffer(compressor)
 //' @export
 // [[Rcpp::export]]
-RawVector flush_compressor_buffer(SEXP compressorPtr, int mode = Z_FINISH) {
+RawVector flush_compressor_buffer(SEXP compressorPtr, int mode = 4) {
   XPtr<Compressor> compressor(compressorPtr);
   if (!compressor) {
     stop("Invalid compressor object");
