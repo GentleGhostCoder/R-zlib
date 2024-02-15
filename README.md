@@ -7,6 +7,26 @@
 
 [![codecov](https://codecov.io/gh/sgeist-ionos/R-zlib/graph/badge.svg?token=WRBNXIMB3N)](https://app.codecov.io/gh/sgeist-ionos/R-zlib)
 
+## Table of Contents
+
+- [Description](#description)
+- [Post](#post)
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [Code Example](#code-example)
+- [Why Another Zlib Package for R?](#why-another-zlib-package-for-r)
+- [Little Benchmark](#little-benchmark)
+- [Future Enhancements](#future-enhancements)
+- [Dependencies](#dependencies)
+  - [Software Requirements](#software-requirements)
+  - [Libraries](#libraries)
+- [Development](#development)
+  - [Installing Dependencies on Ubuntu](#installing-dependencies-on-ubuntu)
+  - [Installing Dependencies on Red Hat](#installing-dependencies-on-red-hat)
+  - [Building](#building)
+- [License](#license)
+- [FAQ](#faq)
+
 ## Description
 
 The `zlib` package for R aims to offer an R-based equivalent of Python's built-in `zlib` module for data compression and decompression. This package provides a suite of functions for working with zlib compression, including utilities for compressing and decompressing data streams, manipulating compressed files, and working with `gzip`, `zlib` and deflate formats.
@@ -315,3 +335,40 @@ sudo yum install cmake ninja-build R libblas-devel liblapack-devel gcc-c++
 ## License  
   
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## FAQ
+
+Q1: What formats does the R-zlib package support for compression and decompression?
+A1: The R-zlib package is designed to work with data compressed using the zlib, deflate, or gzip compression formats. These formats are widely used for compressing individual files or data streams, providing a balance between compression efficiency and speed.
+
+Q2: Can I use the R-zlib package to work with .zip files?
+A2: No, the R-zlib package does not support the .zip file format. .zip files are a container format that can include multiple compressed files along with metadata, which is not directly compatible with the zlib library's functionality. For working with .zip files in R, consider using the zip package or the base R unzip function, which are specifically designed to handle .zip archives.
+
+Q4: What format should I use if I need to stream data?
+A4: If your application involves streaming data, the gzip format is generally a better choice compared to zlib. Gzip is specifically designed to facilitate streaming of compressed data, allowing for efficient real-time compression and decompression without requiring access to the entire data stream upfront.
+
+Q5: I'm encountering errors with the R-zlib package. What should I do?
+A5: Encountering errors while using the R-zlib package can be due to various reasons, often related to compatibility issues or incorrect usage. Here are some common errors and their potential causes:
+
+Error: "invalid stored block lengths"
+This error typically occurs when the decompression process encounters data that does not conform to the expected format. It may indicate that you're trying to decompress data that is not compressed with zlib, deflate, or gzip but is instead in a different format, such as a .zip file archive.
+
+Error: "incorrect header check"
+This error suggests that the decompressor is encountering a header that doesn't match what it expects for the specified WBITS parameter. It's often seen when attempting to decompress data that has been compressed in a format not recognized by zlib, or when the data is corrupted.
+
+Error: "zlib error: incorrect data check"
+This message indicates that the integrity check on the decompressed data has failed, suggesting the compressed data might be corrupted or that there was an issue during the decompression process.
+
+Troubleshooting Steps:
+
+Verify the Data Format: Ensure that the data you are attempting to compress or decompress is in a format supported by R-zlib (zlib, deflate, or gzip). The R-zlib package cannot process .zip file archives or other non-supported formats.
+
+Check WBITS Parameter: If you are manually specifying the WBITS parameter, ensure that it is set correctly for the type of data you are working with. Incorrect WBITS settings can lead to errors.
+
+Inspect Data Integrity: For decompression errors, ensure that the source data is not corrupted. If possible, try decompressing the data with another tool to verify its integrity.
+
+Consult Documentation: Review the R-zlib package documentation for usage examples and verify that your code follows the recommended practices.
+
+Seek Support: If you've checked the above points and still face issues, consider reaching out for support. Provide detailed information about your error, the steps leading up to it, and, if possible, a sample of the data or code. This information can be crucial for diagnosing and resolving the issue.
+
