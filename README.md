@@ -1,11 +1,11 @@
 # zlib for R
-[![Tests](https://github.com/sgeist-ionos/R-zlib/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/sgeist-ionos/R-zlib/actions/workflows/test.yml)
+[![Tests](https://github.com/GentleGhostCoder/R-zlib/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/GentleGhostCoder/R-zlib/actions/workflows/test.yml)
 
-[![Build and Deploy R Markdown Docs](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build-docs.yml/badge.svg?branch=main)](https://sgeist-ionos.github.io/R-zlib/)
+[![Build and Deploy R Markdown Docs](https://github.com/GentleGhostCoder/R-zlib/actions/workflows/build-docs.yml/badge.svg?branch=main)](https://GentleGhostCoder.github.io/R-zlib/)
 
-[![Build tarball artifact on release](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build.yml/badge.svg)](https://github.com/sgeist-ionos/R-zlib/actions/workflows/build.yml)
+[![Build tarball artifact on release](https://github.com/GentleGhostCoder/R-zlib/actions/workflows/build.yml/badge.svg)](https://github.com/GentleGhostCoder/R-zlib/actions/workflows/build.yml)
 
-[![codecov](https://codecov.io/gh/sgeist-ionos/R-zlib/graph/badge.svg?token=WRBNXIMB3N)](https://app.codecov.io/gh/sgeist-ionos/R-zlib)
+[![codecov](https://codecov.io/gh/GentleGhostCoder/R-zlib/graph/badge.svg?token=WRBNXIMB3N)](https://app.codecov.io/gh/GentleGhostCoder/R-zlib)
 
 ## Table of Contents
 
